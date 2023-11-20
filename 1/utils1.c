@@ -6,7 +6,7 @@
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 07:19:53 by frapp             #+#    #+#             */
-/*   Updated: 2023/11/10 23:00:31 by frapp            ###   ########.fr       */
+/*   Updated: 2023/11/20 13:18:25 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,11 @@ void	init_window(t_window *window)
 
 	mlx_set_setting(MLX_MAXIMIZED, false);
 	window->mlx = mlx_init(X_SIZE, Y_SIZE, "fdf", true);
+}
+
+double	pyt(int x1, int x2, int y1, int y2)
+{
+	return (sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2)));
 }
 
 	//window->w_ptr = mlx_new_window(window->mlx, window->w_sizes[0], window->w_sizes[1], "fdf");

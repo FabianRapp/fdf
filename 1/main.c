@@ -6,7 +6,7 @@
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 01:34:47 by frapp             #+#    #+#             */
-/*   Updated: 2023/11/11 03:20:14 by frapp            ###   ########.fr       */
+/*   Updated: 2023/11/20 11:18:34 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,68 +55,6 @@ void	scale_points(double *x, double *y, t_input *input)
 
 }
 
-void	draw(t_window *window, t_input *input, int *xi, int *yi)
-{
-	t_img	*img;
-	int		x_count = 0;
-	int		y_count = 0;
-	unsigned int	color;
-	unsigned int	last_color;
-	unsigned int	*last_row_col;
-	int				index;
-	t_line			struc_line;
-
-	last_row_col = ft_calloc(input->y_max + 2, sizeof(int));
-	last_color = COLOR_BASE;
-	img = window->points;
-	
-		for (int y = 0; y <= input->y_max; y++)
-		{
-			for (int x = 0; x <= input->x_max; x++)
-			{
-				index = y * (input->x_max +1) + x;
-				if (input->hex)
-					color = input->colors[y * (input->x_max + 1) + x];
-				else
-					color = COLOR_BASE;
-					//color = get_color(input->all_pts[index] * 3 + 2);
-				put_point(img->ptr, xi[index], yi[index], color);
-				if (x)
-				{
-					struc_line.get_col = false;
-					if (input->hex)
-						struc_line.color.color = input->colors[y * (input->x_max + 1) + x];
-					else
-						struc_line.get_col = true;
-					struc_line.x1 = xi[index - 1];
-					struc_line.x2 = xi[index];
-					struc_line.y1 = yi[index - 1];
-					struc_line.y2 = yi[index];
-					struc_line.img = window->points->ptr;
-					struc_line.color.org_z2 =  input->all_pts[index] * 3 + 2;
-					// logic to fill color struc
-					connect_points(&struc_line);
-				}
-				if (y)
-				{
-					struc_line.get_col = false;
-					if (input->hex)
-						struc_line.color.color = input->colors[y * (input->x_max + 1) + x];
-					else
-						struc_line.get_col = true;
-					struc_line.x1 = xi[(y - 1) * (input->x_max +1) + x];
-					struc_line.x2 = xi[index];
-					struc_line.y1 = yi[(y - 1) * (input->x_max +1) + x];
-					struc_line.y2 = yi[index];
-					struc_line.img = window->points->ptr;
-					struc_line.color.org_z2 =  input->all_pts[index] * 3 + 2;
-					// logic to fill color struc
-					connect_points(&struc_line);
-				}
-				last_color = color;
-			}
-		}
-}
 
 void update_image(t_window *window)
 {

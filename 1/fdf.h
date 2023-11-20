@@ -6,7 +6,7 @@
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 11:29:17 by frapp             #+#    #+#             */
-/*   Updated: 2023/11/11 02:43:08 by frapp            ###   ########.fr       */
+/*   Updated: 2023/11/20 16:17:44 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,18 +43,26 @@
 #include <stdint.h>
 #include <stdio.h>
 
+typedef struct s_input t_input;
+
 typedef struct s_color
 {
-	int			org_z1;
-	int			org_z2;
+	int			z_target;
 	int			max_z;
 	int			min_z;
-	int			y1;
-	int			y2;
-	int			x1;
-	int			x2;
+	int			y_target;
+	int			x_target;
 	int			x_now;
 	int			y_now;
+	int			x_start;
+	int			y_start;
+	bool		first;
+	bool		hex;
+	int			index;
+	int			direc_z;
+
+	t_input		*input;
+	uint32_t	color_target;
 	uint32_t	color;
 } t_color;
 
@@ -71,19 +79,20 @@ typedef struct s_line
 	int				direct_y;
 	bool			get_col;
 	t_color			color;
+	t_color			last_color;
 	mlx_image_t		*img;
 } t_line;
 
 
 typedef struct s_input
 {
-	int	x_max;
-	int	y_max;
-	int	z_min;
-	int	z_max;
-	int *all_pts;
-	float	z_divisor;
-	bool	hex;
+	int				x_max;
+	int				y_max;
+	int				z_min;
+	int				z_max;
+	int 			*all_pts;
+	float			z_divisor;
+	bool			hex;
 	unsigned int	*colors;
 } t_input;
 
@@ -118,9 +127,16 @@ void	handle_key_presses(mlx_key_data_t keydata, void *arg);
 // utils1.c
 int				clean_exit(t_window *window);
 void			init_window(t_window *window);
+double			pyt(int x1, int x2, int y1, int y2);
+
+// draw.c
+void	draw(t_window *window, t_input *input, int *xi, int *yi);
+
+// color.c
+void	set_color_fin_targets(t_line *line);
+void	get_color(t_color *color, t_color *last_color);
 
 // utils_draw.c
-void	get_color(t_color *color);
 bool	put_point(mlx_image_t *img, int x, int y, unsigned int color);
 void	draw_straight_line(t_line *struc);
 void	connect_points(t_line *struc);

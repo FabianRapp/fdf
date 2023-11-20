@@ -11,7 +11,7 @@ MLX_FLAGS= -framework Cocoa -framework OpenGL -framework IOKit libmlx42.a -Iincl
 #MLX_FLAGS = -Lminilibx_macos -lmlx -framework OpenGL -framework AppKit
 X11_FLAGS = -L/usr/X11/lib -lXext -lX11
 
-SOURCES= input.c utils1.c main.c utils_draw.c line1.c line2.c
+SOURCES= input.c utils1.c main.c utils_draw.c line1.c line2.c draw.c color.c
 OBJECTS = $(SOURCES:.c=.o)
 LDFLAGS = -L./libft -libft
 LIBFT_DIR = ./libft
