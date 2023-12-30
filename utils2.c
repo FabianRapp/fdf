@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 20:44:17 by frapp             #+#    #+#             */
-/*   Updated: 2023/11/25 21:36:49 by frapp            ###   ########.fr       */
+/*   Updated: 2023/12/30 22:09:09 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,28 +55,24 @@ void	set_background_color(char *color_str,
 	}
 }
 
-bool	give_input_feedback(void)
+bool give_input_feedback(void)
 {
-	ft_printf("1.) Argument:\n\tMust be the path to the data\n"
-		"2.) Argument(optional, \"-999\" to make this argument"
-		" invalid):\n\tinteger value for the lowest z value\n"
-		"3.) Argument(optional):\n\t\"dimetric\" to use adimetric projection"
-		"\n4.) Argument(optional):\n\tBackground color: "
-		"\"white\", \"red\", \"green\", \"blue\", \"yellow\" "
-		"\"cyan\", \"magenta\", \"orange\", \"lime\"\n5.)"
-		" Argument (optional):\n\t"
-		"The opacity of the background color (1 to 255)\n");
-	return (false);
+	ft_printf("1.) Argument:\n\tMust be the path to the data\n");
+	ft_printf("2.) Argument(optional, \"-999\" to make this argument invalid):\n\tinteger value for the lowest z value\n");
+	ft_printf("3.) Argument(optional):\n\t\"dimetric\" to use adimetric projection\n");
+	ft_printf("4.) Argument(optional):\n\tBackground color: \"white\", \"red\", \"green\", \"blue\", \"yellow\" \"cyan\", \"magenta\", \"orange\", \"lime\"\n");
+	ft_printf("5.) Argument (optional):\n\tThe opacity of the background color (1 to 255)\n");
+
+	return false;
 }
 
-void	print_controls(void)
+void print_controls(void)
 {
-	ft_printf("Keybinds:\n"
-	"\tUP/DOWN: Tilt object\n"
-	"\tLEFT/RIGHT: Rotate object\n"
-	"\tNUM_PLUS/NUM_MINUS: Zoom\n"
-	"\tQ/W: Move object on x-Axis\n"
-	"\tA/S: Move object on y-Axis\n"
-	"\tZ/X: Move object on z-Axis\n"
-	);
+	ft_printf("Keybinds:\n");
+	ft_printf("\tUP/DOWN: Tilt object\n");
+	ft_printf("\tLEFT/RIGHT: Rotate object\n");
+	ft_printf("\tNUM_PLUS/NUM_MINUS: Zoom\n");
+	ft_printf("\tQ/W: Move object on x-Axis\n");
+	ft_printf("\tA/S: Move object on y-Axis\n");
+	ft_printf("\tZ/X: Move object on z-Axis\n");
 }

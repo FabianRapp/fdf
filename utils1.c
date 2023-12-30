@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils1.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 07:19:53 by frapp             #+#    #+#             */
-/*   Updated: 2023/11/25 21:40:48 by frapp            ###   ########.fr       */
+/*   Updated: 2023/12/30 23:02:33 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@ int	clean_exit(t_window *window)
 	mlx_delete_image(window->mlx, window->img.ptr);
 	mlx_terminate(window->mlx);
 	free(window->input.all_pts);
-	if (window->img.xi)
-		free(window->img.xi);
-	if (window->img.yi)
-		free(window->img.yi);
+	if (window->img.prj_x)
+		free(window->img.prj_x);
+	if (window->img.prj_y)
+		free(window->img.prj_y);
 	exit(0);
 	return (0);
 }
@@ -32,7 +32,7 @@ mlx_t	*init_window(t_window *window)
 	return (window->mlx);
 }
 
-bool	free_arrays(double *a, double *b, int *c, int *d)
+bool	free_on_fail(double *a, double *b, int *c, int *d)
 {
 	if (a && b && c && d)
 		return (true);

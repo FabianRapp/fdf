@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 07:18:01 by frapp             #+#    #+#             */
-/*   Updated: 2023/11/25 15:51:35 by frapp            ###   ########.fr       */
+/*   Updated: 2023/12/30 23:42:54 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,23 @@ bool	process_file_content(t_input *input, int fd)
 	return (process_lines(input, fd, line, i));
 }
 
-bool	fill_input(t_input *input, char *path)
+static void	check_dimetric(bool dimetric, int *all_pts)
+{
+	if (!dimetric)
+		return ;
+	while (*all_pts != INT_MIN)
+	{
+		*(all_pts + 1) /= 2;
+		all_pts += 3;
+	};
+}
+
+bool	fill_input(t_input *input, char *path, bool dimetric)
 {
 	int	fd;
 
 	input->zoom = 1;
-	input->all_pts = ft_calloc(get_max_count(path), sizeof(int));
+	input->all_pts = ft_calloc(get_max_count(path) + 1, sizeof(int));
 	if (!input->all_pts)
 		return (false);
 	input->y_max = 0;
@@ -42,6 +53,7 @@ bool	fill_input(t_input *input, char *path)
 	(input->x_max)--;
 	(input->y_max)--;
 	close(fd);
+	check_dimetric(dimetric, input->all_pts);
 	return (true);
 }
 

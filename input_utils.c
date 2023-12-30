@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/24 16:24:52 by frapp             #+#    #+#             */
-/*   Updated: 2023/11/25 20:19:16 by frapp            ###   ########.fr       */
+/*   Updated: 2023/12/30 23:41:09 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,5 +91,6 @@ bool	process_lines(t_input *input, int fd, char *line, int i)
 			free(base_line);
 		base_line = line;
 	}
+	input->all_pts[i] = INT_MIN;
 	return (true);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf_handle_u.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/11 18:36:35 by frapp             #+#    #+#             */
-/*   Updated: 2023/10/18 09:30:12 by frapp            ###   ########.fr       */
+/*   Updated: 2023/12/30 22:00:01 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,6 @@ int	ft_printf_handle_u(va_list *arg, int *written_bytes)
 
 	n = va_arg(*arg, unsigned);
 	sign = 0;
-	if (n < 0)
-		sign = '-';
 	i = 19;
 	result[i--] = 0;
 	if (!n)

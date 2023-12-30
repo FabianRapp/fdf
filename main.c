@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 01:34:47 by frapp             #+#    #+#             */
-/*   Updated: 2023/11/25 21:40:38 by frapp            ###   ########.fr       */
+/*   Updated: 2023/12/30 23:39:01 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,14 @@ void	update_image(t_window *window)
 	set_background_color(window->color_str,
 		(u_int32_t *)(window->img.ptr->pixels), window->alpha);
 	mlx_image_to_window(window->mlx, window->img.ptr, 0, 0);
-	if (!calulate_isometric_coordinates(&window->input, &(window->img.xi),
-			&(window->img.yi), window))
+	if (!calulate_isometric_coordinates(&window->input, &(window->img.prj_x),
+			&(window->img.prj_y), window))
 		clean_exit (window);
-	draw(window, &(window->input), window->img.xi, window->img.yi);
-	free(window->img.xi);
-	free(window->img.yi);
-	window->img.xi = NULL;
-	window->img.yi = NULL;
+	draw(window, &(window->input), window->img.prj_x, window->img.prj_y);
+	free(window->img.prj_x);
+	free(window->img.prj_y);
+	window->img.prj_x = NULL;
+	window->img.prj_y = NULL;
 }
 
 bool	check_file_ending(char *path, t_window *window)
@@ -84,7 +84,7 @@ int	main(int ac, char *av[])
 		return (0);
 	pts = &window.img;
 	pts->ptr = NULL;
-	if (!fill_input(&window.input, av[1]))
+	if (!fill_input(&window.input, av[1], window.dimetric))
 	{
 		mlx_terminate(window.mlx);
 		return (0);

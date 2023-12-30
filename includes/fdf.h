@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fdf.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 11:29:17 by frapp             #+#    #+#             */
-/*   Updated: 2023/11/25 21:32:34 by frapp            ###   ########.fr       */
+/*   Updated: 2023/12/30 23:31:11 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@
 # endif
 
 # include <stdlib.h>
-# include "MLX42/include/MLX42/MLX42.h"
-# include "libft/libft.h"
+# include <MLX42.h>
+# include <libft.h>
 # include <math.h>
 # include <stdbool.h>
 # include <fcntl.h>
@@ -101,11 +101,11 @@ struct	s_isometric_calc
 {
 	double	*x;
 	double	*y;
-	int		i;
 	double	cos_angle;
 	double	sin_angle;
 	double	cos_elev;
 	double	sin_elev;
+	int		count;
 } ;
 
 typedef struct s_input
@@ -116,12 +116,11 @@ typedef struct s_input
 	int				z_max;
 	int				*all_pts;
 	float			zoom;
-	int				translation_vector[5];
+	int				translation_vector[3];
 }	t_input;
 
 struct	s_scaling_data
 {
-	int		i;
 	double	x_min;
 	double	x_max;
 	double	y_min;
@@ -135,13 +134,16 @@ struct	s_scaling_data
 	double	y_center;
 	double	x_offset;
 	double	y_offset;
+	int		translation_x_off;
+	int		translation_y_off;
+	int		count;
 } ;
 
 typedef struct s_img
 {
 	mlx_image_t	*ptr;
-	int			*xi;
-	int			*yi;
+	int			*prj_x;
+	int			*prj_y;
 	int			count_pts;
 }	t_img;
 
@@ -162,8 +164,8 @@ typedef struct s_window
 
 void			update_image(t_window *window);
 int				calulate_isometric_coordinates(t_input *input,
-					int **xi, int **yi, t_window *window);
-bool			fill_input(t_input *input, char *path);
+					int **prj_x, int **prj_y, t_window *window);
+bool			fill_input(t_input *input, char *path, bool dimetric);
 void			handle_key_presses(mlx_key_data_t keydata, void *arg);
 size_t			get_max_count(char *path);
 bool			initialize_processing(t_input *input,
@@ -171,15 +173,17 @@ bool			initialize_processing(t_input *input,
 bool			process_lines(t_input *input, int fd, char *line, int i);
 int				clean_exit(t_window *window);
 mlx_t			*init_window(t_window *window);
-void			draw(t_window *window, t_input *input, int *xi, int *yi);
+void			draw(t_window *window, t_input *input, int *prj_x, int *prj_y);
 void			get_color(t_color *color);
 void			draw_straight_line(t_line *struc);
 void			connect_points(t_line *struc);
 void			init_rgba(t_color *color);
-bool			free_arrays(double *a, double *b, int *c, int *d);
+bool			free_on_fail(double *a, double *b, int *c, int *d);
 bool			give_input_feedback(void);
 void			print_controls(void);
 void			set_background_color(char *color_str,
 					u_int32_t *pixels, u_int16_t alpha);
+
+void	scale_points(double *x, double *y, t_input *input, t_window *window);
 
 #endif

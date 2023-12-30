@@ -3,12 +3,14 @@ CFLAGS=-Wall -Wextra -Werror
 NAME=fdf
 
 MLX_PATH=MLX42
-MLX=libmlx42.a 
-MLX_FLAGS= -framework Cocoa -framework OpenGL -framework IOKit -Iinclude -lglfw -L"/Users/$(USER)/.brew/opt/glfw/lib/"
-
+INCLUDES=-I./includes
+MLX=libmlx42.a
+MLX_FLAGS_LINUX=-Iinclude -ldl -lglfw -pthread -lm
+MLX_FLAGS_MAC=-framework Cocoa -framework OpenGL -framework IOKit -Iinclude -lglfw -L"/Users/$(USER)/.brew/opt/glfw/lib/"
+MLX_FLAGS=MLX_FLAGS_MAC
 X11_FLAGS = -L/usr/X11/lib -lXext -lX11
 LIBMLX=./MLX42
-SOURCES= input.c utils1.c main.c line1.c line2.c draw.c color.c input_utils.c init_rgba.c projection.c utils2.c
+SOURCES= input.c utils1.c main.c line1.c line2.c draw.c color.c input_utils.c init_rgba.c projection.c utils2.c scaling_and_offset.c
 OBJECTS = $(SOURCES:.c=.o)
 LDFLAGS = -L./libft -libft
 LIBFT_DIR = ./libft
@@ -19,7 +21,13 @@ LIBFT_PATH = $(LIBFT_DIR)/$(LIBFT)
 all: $(NAME)
 
 $(NAME): $(LIBFT_PATH) $(OBJECTS) libmlx
-	$(CC) $(OBJECTS) $(LIBFT) $(MLX) $(MLX_FLAGS)
+	$(CC) $(OBJECTS) $(LIBFT) $(MLX) $(MLX_FLAGS) $(INCLUDES)
+
+mac: $(NAME)
+
+linux: $(LIBFT_PATH) $(OBJECTS) libmlx
+	$(CC) $(OBJECTS) $(LIBFT) $(MLX) $(MLX_FLAGS_LINUX)
+
 
 $(LIBFT_PATH):
 	$(MAKE) -C $(LIBFT_DIR)
@@ -28,7 +36,7 @@ $(LIBFT_PATH):
 libft: $(LIBFT_PATH)
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@ $(INCLUDES)
 
 HEADERS	:= -I ./include -I $(LIBMLX)/include
 LIBS	:= $(LIBMLX)/build/libmlx42.a -ldl -lglfw -pthread -lm
@@ -38,6 +46,7 @@ all: libmlx $(NAME)
 libmlx:
 	@cmake $(LIBMLX) -B $(LIBMLX)/build && make -C $(LIBMLX)/build -j4
 	cp MLX42/build/libmlx42.a $(MLX)
+	cp MLX42/include/MLX42/MLX42.h includes/MLX42.h
 
 
 a: $(OBJS)
@@ -52,13 +61,13 @@ fclean: clean
 	@rm -f $(NAME) a.out
 	@rm -rf $(LIBMLX)/build
 	@$(MAKE) -C $(LIBFT_DIR) fclean
-	
+
 
 re: fclean all
 
 
 norm:
-	@norminette $(SOURCES) fdf.h 
+	@norminette $(SOURCES) fdf.h
 #$(LIBFT_DIR)
 
 install_brew:
