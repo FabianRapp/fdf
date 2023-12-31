@@ -6,7 +6,7 @@
 /*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 07:19:53 by frapp             #+#    #+#             */
-/*   Updated: 2023/12/30 23:02:33 by fabi             ###   ########.fr       */
+/*   Updated: 2023/12/30 23:59:05 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,17 +32,21 @@ mlx_t	*init_window(t_window *window)
 	return (window->mlx);
 }
 
-bool	free_on_fail(double *a, double *b, int *c, int *d)
+bool	free_on_fail(double **a, double **b, int **c, int **d)
 {
-	if (a && b && c && d)
+	if (*a && *b && *c && *d)
 		return (true);
-	if (a)
-		free(a);
-	if (b)
-		free(b);
-	if (c)
-		free(c);
-	if (d)
-		free(d);
+	if (*a)
+		free(*a);
+	if (*b)
+		free(*b);
+	if (*c)
+		free(*c);
+	if (*d)
+		free(*d);
+	*a = NULL;
+	*b = NULL;
+	*c = NULL;
+	*d = NULL;
 	return (false);
 }

@@ -6,7 +6,7 @@
 /*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 20:44:17 by frapp             #+#    #+#             */
-/*   Updated: 2023/12/30 22:09:09 by fabi             ###   ########.fr       */
+/*   Updated: 2023/12/31 01:05:47 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,10 @@ bool	set_background_color2(char *color_str, u_int32_t *color)
 }
 
 void	set_background_color(char *color_str,
-	u_int32_t *pixels, u_int16_t alpha)
+	uint32_t *pixels, uint16_t alpha)
 {
 	int			i;
-	u_int32_t	color;
+	uint32_t	color;
 
 	if (!set_background_color2(color_str, &color))
 		color = 0xFF000000;

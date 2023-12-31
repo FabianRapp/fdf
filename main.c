@@ -6,7 +6,7 @@
 /*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 01:34:47 by frapp             #+#    #+#             */
-/*   Updated: 2023/12/30 23:39:01 by fabi             ###   ########.fr       */
+/*   Updated: 2023/12/31 00:33:30 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	update_image(t_window *window)
 	window->img.ptr = NULL;
 	window->img.ptr = mlx_new_image(window->mlx, X_IM_SIZE, Y_IM_SIZE);
 	set_background_color(window->color_str,
-		(u_int32_t *)(window->img.ptr->pixels), window->alpha);
+		(uint32_t *)(window->img.ptr->pixels), window->alpha);
 	mlx_image_to_window(window->mlx, window->img.ptr, 0, 0);
 	if (!calulate_isometric_coordinates(&window->input, &(window->img.prj_x),
 			&(window->img.prj_y), window))
@@ -31,28 +31,30 @@ void	update_image(t_window *window)
 	window->img.prj_y = NULL;
 }
 
-bool	check_file_ending(char *path, t_window *window)
-{
+bool	check_file_ending(char *path, t_window *window) {
 	int	len;
 
 	len = ft_strlen(path);
 	if (len < 4)
 		return (false);
-	if (path[len - 1] != 'f' || path[len - 2]
-		!= 'd' || path[len - 3] != 'f'
-		|| path[len - 4] != '.')
-		return (give_input_feedback());
+	bool valid_file_ending = path[len - 1] == 'f' &&
+							path[len - 2] == 'd' &&
+							path[len - 3] == 'f' &&
+							path[len - 4] == '.';
+
+	if (!valid_file_ending) {
+		return give_input_feedback();
+	}
 	window->dimetric = false;
 	window->min_displayed_z = INT_MIN;
 	window->path = path;
 	return (true);
 }
 
-bool	init_main(int *ac, char *av[], t_window *window)
-{
-	window->input.translation_vector[0] = 0;
-	window->input.translation_vector[1] = 0;
-	window->input.translation_vector[2] = 0;
+bool	init_main(int *ac, char *av[], t_window *window) {
+	window->input.trans_vec[0] = 0;
+	window->input.trans_vec[1] = 0;
+	window->input.trans_vec[2] = 0;
 	window->init = true;
 	if (*ac < 2 || *ac > 6)
 		return (give_input_feedback());
@@ -72,11 +74,11 @@ bool	init_main(int *ac, char *av[], t_window *window)
 		return (false);
 	window->elevation_angle = 1.521710;
 	window->rotation_angle = 0.834485;
+	window->input.zoom = 1;
 	return (true);
 }
 
-int	main(int ac, char *av[])
-{
+int	main(int ac, char *av[]) {
 	t_window	window;
 	t_img		*pts;
 
@@ -84,8 +86,7 @@ int	main(int ac, char *av[])
 		return (0);
 	pts = &window.img;
 	pts->ptr = NULL;
-	if (!fill_input(&window.input, av[1], window.dimetric))
-	{
+	if (!parser(&window.input, av[1], window.dimetric)) {
 		mlx_terminate(window.mlx);
 		return (0);
 	}

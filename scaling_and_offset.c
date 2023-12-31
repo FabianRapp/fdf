@@ -6,7 +6,7 @@
 /*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 23:12:05 by fabi              #+#    #+#             */
-/*   Updated: 2023/12/30 23:41:28 by fabi             ###   ########.fr       */
+/*   Updated: 2023/12/31 01:15:17 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,14 @@ static void	init_scaling(double *x, double *y, struct s_scaling_data *data,
 	data->y_center = Y_IM_SIZE / 2;
 }
 
-static void	calc_offsets(struct s_scaling_data *data, t_input *input)
+static void	calc_offsets(struct s_scaling_data *data, float zoom)
 {
 	data->x_scale = X_IM_SIZE / data->x_range;
 	data->y_scale = Y_IM_SIZE / data->y_range;
 	if (data->x_scale < data->y_scale)
-		data->scale_factor = data->x_scale * input->zoom;
+		data->scale_factor = data->x_scale * zoom;
 	else
-		data->scale_factor = data->y_scale * input->zoom;
+		data->scale_factor = data->y_scale * zoom;
 
 	data->x_offset = (X_IM_SIZE - (data->x_range * data->scale_factor))
 		/ 2 - data->x_min * data->scale_factor;
@@ -56,6 +56,21 @@ static void	calc_offsets(struct s_scaling_data *data, t_input *input)
 		* data->scale_factor + data->y_offset;
 }
 
+static void	get_projected_translation_offset(int *trans_vec, t_window *window,
+	struct s_scaling_data *data)
+{
+	double	cos_angle = cos(window->rotation_angle);
+	double	sin_angle = sin(window->rotation_angle);
+	double	cos_elev = cos(window->elevation_angle);
+	double	sin_elev = sin(window->elevation_angle);
+
+	data->translation_x_off = trans_vec[X_OFFSET] * cos_angle
+		- trans_vec[Y_OFFSET] * sin_angle;
+	data->translation_y_off = trans_vec[X_OFFSET] * sin_elev
+		* sin_angle + trans_vec[Y_OFFSET] * sin_elev
+		* cos_angle - trans_vec[Z_OFFSET] * cos_elev;
+}
+
 static void	apply_offset(double *x, double *y, struct s_scaling_data *data)
 {
 	for (int i = 0; i < data->count; i++)
@@ -65,27 +80,12 @@ static void	apply_offset(double *x, double *y, struct s_scaling_data *data)
 	}
 }
 
-static void	apply_transvec_projected(t_input *input, t_window *window,
-	struct s_scaling_data *data)
-{
-	double	cos_angle = cos(window->rotation_angle);
-	double	sin_angle = sin(window->rotation_angle);
-	double	cos_elev = cos(window->elevation_angle);
-	double	sin_elev = sin(window->elevation_angle);
-
-	data->translation_x_off = input->translation_vector[0] * cos_angle
-		- input->translation_vector[1] * sin_angle;
-	data->translation_y_off = input->translation_vector[0] * sin_elev
-		* sin_angle + input->translation_vector[1] * sin_elev
-		* cos_angle - input->translation_vector[2] * cos_elev;
-}
-
 void	scale_points(double *x, double *y, t_input *input, t_window *window)
 {
 	struct s_scaling_data	data;
 
 	init_scaling(x, y, &data, input);
-	apply_transvec_projected(input, window, &data);
-	calc_offsets(&data, input);
+	get_projected_translation_offset(input->trans_vec, window, &data);
+	calc_offsets(&data, input->zoom);
 	apply_offset(x, y, &data);
 }

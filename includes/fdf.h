@@ -6,28 +6,28 @@
 /*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 11:29:17 by frapp             #+#    #+#             */
-/*   Updated: 2023/12/30 23:31:11 by fabi             ###   ########.fr       */
+/*   Updated: 2023/12/31 01:10:09 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FDF_H
 # define FDF_H
 
-# ifndef X_SIZE
-#  define X_SIZE 1400
-# endif
+#define X_SIZE 1400
+#define Y_SIZE 1400
+#define X_IM_SIZE 1400
+#define Y_IM_SIZE 1400
 
-# ifndef Y_SIZE
-#  define Y_SIZE 1400
-# endif
+#define DIMETRIC_Y_DIVISOR 2
+#define POINT_SIZE 3
+#define X_OFFSET 0
+#define Y_OFFSET 1
+#define Z_OFFSET 2
 
-# ifndef X_IM_SIZE
-#  define X_IM_SIZE 1400
-# endif
-
-# ifndef Y_IM_SIZE
-#  define Y_IM_SIZE 1400
-# endif
+#define ROTATION_INCREMENT (M_PI / 64)
+#define ZOOM_IN_FACTOR 1.05
+#define ZOOM_OUT_FACTOR 0.95
+#define TRANSLATION_INCREMENT 2
 
 // min 1, lower is better qulity but more cost
 # ifndef GRAFIC_LVL
@@ -116,7 +116,7 @@ typedef struct s_input
 	int				z_max;
 	int				*all_pts;
 	float			zoom;
-	int				translation_vector[3];
+	int				trans_vec[3];
 }	t_input;
 
 struct	s_scaling_data
@@ -157,7 +157,7 @@ typedef struct s_window
 	char		*path;
 	bool		dimetric;
 	bool		init;
-	u_int8_t	alpha;
+	uint8_t	alpha;
 	char		*color_str;
 	int			min_displayed_z;
 }	t_window;
@@ -165,12 +165,8 @@ typedef struct s_window
 void			update_image(t_window *window);
 int				calulate_isometric_coordinates(t_input *input,
 					int **prj_x, int **prj_y, t_window *window);
-bool			fill_input(t_input *input, char *path, bool dimetric);
+bool			parser(t_input *input, char *path, bool dimetric);
 void			handle_key_presses(mlx_key_data_t keydata, void *arg);
-size_t			get_max_count(char *path);
-bool			initialize_processing(t_input *input,
-					int fd, char **line, int *i);
-bool			process_lines(t_input *input, int fd, char *line, int i);
 int				clean_exit(t_window *window);
 mlx_t			*init_window(t_window *window);
 void			draw(t_window *window, t_input *input, int *prj_x, int *prj_y);
@@ -178,11 +174,11 @@ void			get_color(t_color *color);
 void			draw_straight_line(t_line *struc);
 void			connect_points(t_line *struc);
 void			init_rgba(t_color *color);
-bool			free_on_fail(double *a, double *b, int *c, int *d);
+bool			free_on_fail(double **a, double **b, int **c, int **d);
 bool			give_input_feedback(void);
 void			print_controls(void);
 void			set_background_color(char *color_str,
-					u_int32_t *pixels, u_int16_t alpha);
+					uint32_t *pixels, uint16_t alpha);
 
 void	scale_points(double *x, double *y, t_input *input, t_window *window);
 

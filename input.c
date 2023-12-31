@@ -6,95 +6,33 @@
 /*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 07:18:01 by frapp             #+#    #+#             */
-/*   Updated: 2023/12/30 23:42:54 by fabi             ###   ########.fr       */
+/*   Updated: 2023/12/31 00:51:27 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-bool	process_file_content(t_input *input, int fd)
-{
-	char	*line;
-	int		i;
+void handle_key_presses(mlx_key_data_t keydata, void *arg) {
+	t_window *window = (t_window *)arg;
+	keys_t key = keydata.key;
 
-	if (!initialize_processing(input, fd, &line, &i))
-		return (false);
-	return (process_lines(input, fd, line, i));
-}
-
-static void	check_dimetric(bool dimetric, int *all_pts)
-{
-	if (!dimetric)
-		return ;
-	while (*all_pts != INT_MIN)
-	{
-		*(all_pts + 1) /= 2;
-		all_pts += 3;
-	};
-}
-
-bool	fill_input(t_input *input, char *path, bool dimetric)
-{
-	int	fd;
-
-	input->zoom = 1;
-	input->all_pts = ft_calloc(get_max_count(path) + 1, sizeof(int));
-	if (!input->all_pts)
-		return (false);
-	input->y_max = 0;
-	fd = open(path, O_RDONLY);
-	if (!fd)
-		return (false);
-	if (fd < 0 || !process_file_content(input, fd))
-	{
-		close(fd);
-		return (false);
+	if (keydata.action != MLX_PRESS)
+		return;
+	switch (key) {
+		case MLX_KEY_UP: window->elevation_angle += ROTATION_INCREMENT; break;
+		case MLX_KEY_LEFT: window->rotation_angle -= ROTATION_INCREMENT; break;
+		case MLX_KEY_RIGHT: window->rotation_angle += ROTATION_INCREMENT; break;
+		case MLX_KEY_DOWN: window->elevation_angle -= ROTATION_INCREMENT; break;
+		case MLX_KEY_KP_ADD: (window->input.zoom) *= ZOOM_IN_FACTOR; break;
+		case MLX_KEY_KP_SUBTRACT: (window->input.zoom) *= ZOOM_OUT_FACTOR; break;
+		case MLX_KEY_ESCAPE: clean_exit(arg); break;
+		case MLX_KEY_W: window->input.trans_vec[0] += TRANSLATION_INCREMENT; break;
+		case MLX_KEY_Q: window->input.trans_vec[0] -= TRANSLATION_INCREMENT; break;
+		case MLX_KEY_A: window->input.trans_vec[1] += TRANSLATION_INCREMENT; break;
+		case MLX_KEY_S: window->input.trans_vec[1] -= TRANSLATION_INCREMENT; break;
+		case MLX_KEY_Z: window->input.trans_vec[2] += TRANSLATION_INCREMENT; break;
+		case MLX_KEY_X: window->input.trans_vec[2] -= TRANSLATION_INCREMENT; break;
+		default: return;
 	}
-	(input->x_max)--;
-	(input->y_max)--;
-	close(fd);
-	check_dimetric(dimetric, input->all_pts);
-	return (true);
-}
-
-bool	handle_key_presses2(mlx_key_data_t keydata, void *arg)
-{
-	if (keydata.key == MLX_KEY_W && keydata.action == MLX_PRESS)
-		((t_window *)arg)->input.translation_vector[0] += 2;
-	else if (keydata.key == MLX_KEY_Q && keydata.action == MLX_PRESS)
-		((t_window *)arg)->input.translation_vector[0] -= 2;
-	else if (keydata.key == MLX_KEY_A && keydata.action == MLX_PRESS)
-		((t_window *)arg)->input.translation_vector[1] += 2;
-	else if (keydata.key == MLX_KEY_S && keydata.action == MLX_PRESS)
-		((t_window *)arg)->input.translation_vector[1] -= 2;
-	else if (keydata.key == MLX_KEY_Z && keydata.action == MLX_PRESS)
-		((t_window *)arg)->input.translation_vector[2] += 2;
-	else if (keydata.key == MLX_KEY_X && keydata.action == MLX_PRESS)
-		((t_window *)arg)->input.translation_vector[2] -= 2;
-	else
-		return (false);
-	return (true);
-}
-
-void	handle_key_presses(mlx_key_data_t keydata, void *arg)
-{
-	if (keydata.key == MLX_KEY_UP && keydata.action == MLX_PRESS)
-		((t_window *)arg)->elevation_angle += M_PI / 64;
-	else if (keydata.key == MLX_KEY_LEFT && keydata.action == MLX_PRESS)
-		((t_window *)arg)->rotation_angle -= M_PI / 64;
-	else if (keydata.key == MLX_KEY_RIGHT && keydata.action == MLX_PRESS)
-		((t_window *)arg)->rotation_angle += M_PI / 64;
-	else if (keydata.key == MLX_KEY_DOWN && keydata.action == MLX_PRESS)
-		((t_window *)arg)->elevation_angle -= M_PI / 64;
-	else if (keydata.key == MLX_KEY_KP_ADD && keydata.action == MLX_PRESS)
-		(((t_window *)arg)->input.zoom) *= 1.05;
-	else if (keydata.key == MLX_KEY_KP_SUBTRACT && keydata.action == MLX_PRESS)
-		(((t_window *)arg)->input.zoom) *= 0.95;
-	else if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
-		clean_exit(arg);
-	else if (handle_key_presses2(keydata, arg))
-		return (update_image((t_window *)arg));
-	else
-		return ;
-	update_image((t_window *)arg);
+	update_image(window);
 }
