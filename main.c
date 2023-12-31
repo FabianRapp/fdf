@@ -6,7 +6,7 @@
 /*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 01:34:47 by frapp             #+#    #+#             */
-/*   Updated: 2023/12/31 00:33:30 by fabi             ###   ########.fr       */
+/*   Updated: 2023/12/31 01:29:19 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,12 +80,9 @@ bool	init_main(int *ac, char *av[], t_window *window) {
 
 int	main(int ac, char *av[]) {
 	t_window	window;
-	t_img		*pts;
 
 	if (!init_main(&ac, av, &window))
 		return (0);
-	pts = &window.img;
-	pts->ptr = NULL;
 	if (!parser(&window.input, av[1], window.dimetric)) {
 		mlx_terminate(window.mlx);
 		return (0);
