@@ -1,14 +1,19 @@
 CC=cc
 CFLAGS=-Wall -Wextra -Werror
 NAME=fdf
-
+OS := $(shell uname)
 MLX_PATH=MLX42
 INCLUDES=-I./includes
 MLX=libmlx42.a
 MLX_FLAGS_LINUX=-Iinclude -ldl -lglfw -pthread -lm
-MLX_FLAGS_MAC=-framework Cocoa -framework OpenGL -framework IOKit -Iinclude -lglfw -L"/Users/$(USER)/.brew/opt/glfw/lib/"
-MLX_FLAGS=MLX_FLAGS_MAC
-X11_FLAGS = -L/usr/X11/lib -lXext -lX11
+MLX_FLAGS_MAC= -framework Cocoa -framework OpenGL -framework IOKit -Iinclude -lglfw -L"/Users/$(USER)/.brew/opt/glfw/lib/"
+MLX_FLAGS_LINUX =-I MLX42/include/MLX42 $(MLX) -Iinclude -ldl -lglfw -pthread -lm
+#X11_FLAGS = -L/usr/X11/lib -lXext -lX11
+ifeq ($(OS), Darwin)
+	MLX_FLAGS = $(MLX_FLAGS_MAC)
+else
+	MLX_FLAGS = $(MLX_FLAGS_LINUX)
+endif
 LIBMLX=./MLX42
 SOURCES= input.c utils1.c main.c line1.c line2.c draw.c color.c input_parser.c init_rgba.c projection.c utils2.c scaling_and_offset.c
 OBJECTS = $(SOURCES:.c=.o)
@@ -21,7 +26,7 @@ LIBFT_PATH = $(LIBFT_DIR)/$(LIBFT)
 all: $(NAME)
 
 $(NAME): $(LIBFT_PATH) $(OBJECTS) libmlx
-	$(CC) $(OBJECTS) $(LIBFT) $(MLX) $(MLX_FLAGS) $(INCLUDES)
+	$(CC) $(OBJECTS) $(LIBFT) $(MLX) $(MLX_FLAGS) $(INCLUDES) -o $(NAME)
 
 mac: $(NAME)
 
