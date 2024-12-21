@@ -35,7 +35,7 @@ void	progress_minus2(t_color *color)
 void	progress_pos1(t_color *color)
 {
 	color->rgba3.start_red = 128;
-	color->rgba3.start_green = 00;
+	color->rgba3.start_green = 0;
 	color->rgba3.start_blue = 128;
 	color->rgba3.end_red = 0xFF;
 	color->rgba3.end_green = 190;
@@ -47,7 +47,7 @@ void	progress_pos2(t_color *color)
 	color->rgba4.start_red = 0xFF;
 	color->rgba4.start_green = 0xFF;
 	color->rgba4.start_blue = 0xFF;
-	color->rgba4.end_red = 200;
+	color->rgba4.end_red = 128;
 	color->rgba4.end_green = 0;
 	color->rgba4.end_blue = 128;
 }
