@@ -1,5 +1,10 @@
 # 3D Wireframe Renderer
 
+![landscape](screenshots/landscape.png)
+![julia set](screenshots/julia.png)
+![pylone](screenshots/pylone.png)
+![42](screenshots/42.png)
+
 This project is a simple 3D wireframe renderer implemented in C. It uses the MiniLibX library to create a graphical window and draw lines.
 
 ## Features
