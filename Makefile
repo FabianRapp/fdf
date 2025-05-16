@@ -1,5 +1,5 @@
 CC=cc
-CFLAGS=-Wall -Wextra -Werror
+CFLAGS=-Wall -Wextra -Werror -Ofast
 NAME=fdf
 OS := $(shell uname)
 MLX_PATH=MLX42
