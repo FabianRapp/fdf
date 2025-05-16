@@ -25,7 +25,7 @@ LIBFT_PATH = $(LIBFT_DIR)/$(LIBFT)
 
 all: $(NAME)
 
-$(NAME): $(LIBFT_PATH) $(OBJECTS) libmlx
+$(NAME): libmlx $(LIBFT_PATH) $(OBJECTS)
 	$(CC) $(OBJECTS) $(LIBFT) $(MLX) $(MLX_FLAGS) $(INCLUDES) -o $(NAME)
 
 mac: $(NAME)
